@@ -196,3 +196,4 @@ models/
 
 script.txt
 test.py
+chroma_db/*
