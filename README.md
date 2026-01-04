@@ -14,8 +14,8 @@ This is a monorepo containing multiple LangChain projects and experiments. Each 
 
 Each project lives on its own branch under `projects/`:
 
-| Project | Branch | Description |
-|---------|--------|-------------|
+| Project | Branch |
+|---------|--------|
 | Hello World | `projects/hello-world` |
 | ReAct Agent with Tool Calling | `projects/ReAct-agent-with_tool_calling` |
 | ReAct Search Agent | `projects/ReAct-search-agent` |
