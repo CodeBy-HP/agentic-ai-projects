@@ -20,7 +20,7 @@ class Config:
     SENDGRID_API_KEY = os.getenv("SENDGRID_API_KEY")
     
     EMAIL_FROM = "code.by.hp@gmail.com"
-    EMAIL_TO = "harshdousab372004@gmail.com"
+    EMAIL_TO = "harshpatelsirt1@gmail.com"
     
     MAX_TURNS = 30
 

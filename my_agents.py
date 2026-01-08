@@ -1,7 +1,9 @@
-from agents import Agent
+from agents import Agent, input_guardrail, GuardrailFunctionOutput, Runner
 from config import Config
 from prompts import SalesAgentPrompts, EmailFormatterPrompts, ManagerPrompts
 from tools import send_html_email
+from pydantic import BaseModel
+from typing import Optional
 
 
 def create_sales_draft_agents() -> tuple[Agent, Agent, Agent]:
@@ -108,6 +110,50 @@ def create_agent_tools(
     return sales_manager_tools, email_manager_tools
 
 
+def create_guardrail_agent() -> Agent:
+    """
+    Create a guardrail agent that validates input messages for inappropriate content.
+    
+    This agent checks if the user's message contains requests that involve:
+    - Using specific individuals' personal names inappropriately
+    - Potentially sensitive or unauthorized use of personal information
+    - Requests that violate privacy or professional boundaries
+    
+    Returns:
+        Agent configured to validate input messages
+    """
+    class NameCheckOutput(BaseModel):
+        """Output schema for name validation check."""
+        contains_inappropriate_name_usage: bool
+        detected_name: Optional[str] = None
+        reason: str
+
+    guardrail_agent = Agent(
+        name="Input Validation Guardrail",
+        instructions="""You are a content validation agent that reviews user requests for inappropriate use of personal information.
+
+**Your Task:**
+Analyze the user's message and determine if it contains:
+1. Requests to use someone's real personal name in an unauthorized or inappropriate way
+2. Instructions that could violate privacy or professional boundaries
+3. Attempts to impersonate specific individuals
+
+**Guidelines:**
+- Generic salutations like "Dear CEO", "Dear Hiring Manager" are ACCEPTABLE
+- Company names and job titles are ACCEPTABLE
+- Fictional or placeholder names are ACCEPTABLE
+- Real personal names used inappropriately (e.g., "pretend to be John Smith", "send email as Jane Doe") are NOT acceptable
+
+**Output:**
+- Set `contains_inappropriate_name_usage` to `true` only if there's a clear privacy/boundary violation
+- If a problematic name is found, include it in `detected_name`
+- Provide a clear `reason` explaining your decision""",
+        output_type=NameCheckOutput,
+        model=Config.AZURE_MODEL,
+    )
+    return guardrail_agent
+
+
 def create_manager_agents(
     sales_manager_tools: list, email_manager_tools: list
 ) -> tuple[Agent, Agent]:
@@ -129,12 +175,56 @@ def create_manager_agents(
         handoff_description="Convert an email to HTML and send it",
     )
 
+    # Create guardrail agent for input validation
+    validation_agent = create_guardrail_agent()
+
+    @input_guardrail
+    async def validate_input_for_privacy(ctx, agent, message):
+        """
+        Input guardrail that validates messages for inappropriate personal information usage.
+        
+        This guardrail prevents the system from processing requests that:
+        - Use real personal names inappropriately
+        - Violate privacy or professional boundaries
+        - Attempt unauthorized impersonation
+        
+        If triggered, the workflow is blocked and the user receives an explanation.
+        """
+        # Run the validation agent to check the input message
+        result = await Runner.run(validation_agent, message, context=ctx.context)
+        validation_output = result.final_output
+        
+        # Prepare detailed information about the validation result
+        output_info = {
+            "validation_result": {
+                "flagged": validation_output.contains_inappropriate_name_usage,
+                "detected_name": validation_output.detected_name,
+                "reason": validation_output.reason,
+            }
+        }
+        
+        # If inappropriate usage detected, trigger the tripwire to block processing
+        tripwire_triggered = validation_output.contains_inappropriate_name_usage
+        
+        if tripwire_triggered:
+            # Add user-friendly message to the output
+            output_info["user_message"] = (
+                f"⚠️ Input validation failed: {validation_output.reason}\n\n"
+                f"Please revise your request to avoid inappropriate use of personal information."
+            )
+        
+        return GuardrailFunctionOutput(
+            output_info=output_info,
+            tripwire_triggered=tripwire_triggered,
+        )
+
     sales_manager = Agent(
         name="Sales Manager",
         instructions=ManagerPrompts.SALES_MANAGER,
         tools=sales_manager_tools,
         handoffs=[email_manager],
         model=Config.AZURE_MODEL,
+        input_guardrails=[validate_input_for_privacy],
     )
 
     return sales_manager, email_manager
