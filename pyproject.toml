@@ -1,0 +1,11 @@
+[project]
+name = "projects"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "langsmith>=0.6.2",
+    "openai>=2.14.0",
+    "openai-agents>=0.6.5",
+]
