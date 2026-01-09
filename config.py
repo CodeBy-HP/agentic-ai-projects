@@ -14,6 +14,11 @@ class Config:
 
     MAX_TURNS = 10
 
+    SENDGRID_API_KEY = os.getenv("SENDGRID_API_KEY")
+
+    EMAIL_FROM = "code.by.hp@gmail.com"
+    EMAIL_TO = "harshpatelsirt1@gmail.com"
+
 
 def initialize_azure_client() -> AsyncAzureOpenAI:
     """
