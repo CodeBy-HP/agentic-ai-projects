@@ -11,9 +11,13 @@ import os
 from langchain_openai import AzureChatOpenAI
 from typing import TypedDict
 from tools import TOOLS
-from langgraph.checkpoint.memory import InMemorySaver
+import sqlite3
+from langgraph.checkpoint.sqlite import SqliteSaver
 
-memory = InMemorySaver()
+db_path = "memory.db"
+conn = sqlite3.connect(db_path, check_same_thread=False)
+sql_memory = SqliteSaver(conn)
+sql_memory.setup()
 
 
 class State(TypedDict):
@@ -50,8 +54,8 @@ graph_builder.add_conditional_edges("chatbot", should_continue, ["tools", END])
 graph_builder.add_edge("tools", "chatbot")
 graph_builder.add_edge(START, "chatbot")
 
-graph = graph_builder.compile(checkpointer=memory)
-
+graph = graph_builder.compile(checkpointer=sql_memory)
+graph.get_graph().draw_mermaid_png(output_file_path="flow.png")
 config = {"configurable": {"thread_id": "1"}}
 
 
