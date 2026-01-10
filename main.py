@@ -11,6 +11,9 @@ import os
 from langchain_openai import AzureChatOpenAI
 from typing import TypedDict
 from tools import TOOLS
+from langgraph.checkpoint.memory import InMemorySaver
+
+memory = InMemorySaver()
 
 
 class State(TypedDict):
@@ -24,6 +27,7 @@ llm_with_tools = llm.bind_tools(TOOLS)
 
 
 def chatbot(state: State):
+    print(state)
     return {"messages": [llm_with_tools.invoke(state["messages"])]}
 
 
@@ -46,13 +50,17 @@ graph_builder.add_conditional_edges("chatbot", should_continue, ["tools", END])
 graph_builder.add_edge("tools", "chatbot")
 graph_builder.add_edge(START, "chatbot")
 
-graph = graph_builder.compile()
+graph = graph_builder.compile(checkpointer=memory)
+
+config = {"configurable": {"thread_id": "1"}}
 
 
 def chat(user_input: str, history):
     from langchain.messages import HumanMessage
 
-    result = graph.invoke({"messages": [HumanMessage(content=user_input)]})
+    result = graph.invoke(
+        {"messages": [HumanMessage(content=user_input)]}, config=config
+    )
     return result["messages"][-1].content
 
 
