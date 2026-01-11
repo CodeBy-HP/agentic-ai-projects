@@ -195,3 +195,16 @@ data/
 models/
 
 snippets.txt
+
+#sqlite
+memory.db
+memory.db-shm
+memory.db-wal
+
+*.db
+*.db-shm
+*.db-wal
+
+# Playwright
+ms-playwright/
+**/ms-playwright/

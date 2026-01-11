@@ -3,6 +3,7 @@ import os
 
 load_dotenv(override=True)
 
+import asyncio
 from langchain.tools import tool
 from langchain_community.utilities import GoogleSerperAPIWrapper
 import requests
@@ -30,5 +31,28 @@ def send_push_notification(text: str):
 
 TOOLS = [send_push_notification, search]
 
+from langchain_community.agent_toolkits import PlayWrightBrowserToolkit
+from langchain_community.tools.playwright.utils import create_sync_playwright_browser
+
+
+def run_playwright():
+    sync_browser = create_sync_playwright_browser(headless=False)
+
+    toolkit = PlayWrightBrowserToolkit.from_browser(sync_browser=sync_browser)
+    tools = toolkit.get_tools()
+
+    tool_dict = {tool.name: tool for tool in tools}
+    navigate_tool = tool_dict.get("navigate_browser")
+    extract_text_tool = tool_dict.get("extract_text")
+
+    navigate_tool.run({"url": "https://example.com", "timeout": 60000})
+    text = extract_text_tool.run({})
+
+    print(f"Extracted text: {text}")
+    sync_browser.close()
+
+    return tools
+
+
 if __name__ == "__main__":
-    send_push_notification.invoke({"text": "Hello, me"})
+    browser_tools = run_playwright()
