@@ -208,3 +208,5 @@ memory.db-wal
 # Playwright
 ms-playwright/
 **/ms-playwright/
+
+sandbox

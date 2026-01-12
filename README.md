@@ -1,48 +1,96 @@
-# LangChain Projects - Monorepo
+# 🤖 Sidekick - Personal Co-Worker
 
-## Overview
+An AI agent that completes tasks step-by-step with intelligent evaluation feedback. It integrates multiple tools to search the web, run code, manage files, and more.
 
-This is a monorepo containing multiple LangChain projects and experiments. Each project explores different aspects of LangChain, including agents, RAG (Retrieval-Augmented Generation), and various AI patterns. The projects are organized across different branches under the `projects/` namespace.
+## **Quick Start**
 
-## Tech Stack
-
-- **LangChain** - Framework for building with LLMs
-- **Python** - Primary programming language
-- **Various LLM APIs** - OpenAI, Anthropic, and other providers
-
-## Projects
-
-Each project lives on its own branch under `projects/`:
-
-| Project | Branch |
-|---------|--------|
-| Hello World | `projects/hello-world` |
-| ReAct Agent with Tool Calling | `projects/ReAct-agent-with_tool_calling` |
-| ReAct Search Agent | `projects/ReAct-search-agent` |
-| Agentic RAG | `projects/agentic-rag` |
-| Documentation Helper | `projects/documentation-helper` |
-| RAG Gist | `projects/rag-gist` |
-| React Function Calling | `projects/react-function-calling` |
-| Reflection Agent | `projects/reflection-agent` |
-| Reflexion Agent | `projects/reflexion-agent` |
-| Search Agent | `projects/search-agent` |
-
-## Learning Resources
-
-This monorepo was created while learning from:
-- [Edin Marco's LangChain Course on Udemy](https://www.udemy.com/course/langchain/learn)
-- Various other Udemy courses
-
-## Getting Started
-
-To explore a specific project, switch to its branch:
-
+### **1. Setup**
 ```bash
-git checkout projects/project-name
+# Clone and navigate to project
+cd projects
+
+# Install dependencies
+uv sync
+
+# Copy environment file
+cp .env.example .env
+
+# Add your API keys to .env
 ```
 
-Each project contains its own README with specific setup and usage instructions.
+### **2. Get API Keys**
+- **Azure OpenAI**: [Azure Portal](https://portal.azure.com)
+- **Google Serper**: [serper.dev](https://serper.dev)
+- **Pushover**: [pushover.net](https://pushover.net) (optional)
+
+### **3. Run**
+```bash
+uv run app.py
+```
+
+Then open `http://127.0.0.1:7860` in your browser.
 
 ---
 
-**Note:** This is a learning monorepo where each branch represents a different experiment or project implementation.
+## **Features**
+
+| Tool | What It Does |
+|------|--------------|
+| 🔍 **Web Search** | Find current information online |
+| 🌐 **Browser** | Navigate websites and extract data |
+| 📚 **Wikipedia** | Look up information from Wikipedia |
+| 🐍 **Python REPL** | Execute Python code directly |
+| 📁 **File Manager** | Create, read, write files |
+| 📲 **Notifications** | Send push alerts |
+
+---
+
+## **How to Use**
+
+1. **Enter your task** - e.g., "Find the current Bitcoin price"
+2. **Set success criteria** - e.g., "Price in USD and EUR"
+3. **Click Submit** - Agent works through the task
+4. **Review output** - See results and evaluation
+
+---
+
+## **Tech Stack**
+
+- **Framework**: LangGraph v0.2+ (Agent Orchestration)
+- **UI**: Gradio 6.0 (Web Interface)
+- **LLM**: Azure OpenAI
+- **Browser**: Playwright
+- **Async**: Python 3.10+ asyncio
+
+---
+
+## **Project Structure**
+
+```
+projects/
+├── app.py              # Gradio UI interface
+├── sidekick.py         # LangGraph agent logic
+├── sidekick_tools.py   # Tool integrations
+├── .env.example        # Environment template
+└── sandbox/            # File storage
+```
+
+---
+
+## **Example Queries**
+
+- "Search for latest AI news and summarize"
+- "Write Python code to calculate Fibonacci numbers"
+- "Create a file with sample data and parse it"
+- "Visit Python.org and get the current version"
+
+---
+
+## **Requirements**
+
+- Python 3.12
+- Azure OpenAI API key
+- Google Serper API key
+- Pushover account for notifications
+
+---
