@@ -1,48 +1,72 @@
-# LangChain Projects - Monorepo
+# AI Research & Email Agent
 
-## Overview
+A multi-agent system that automates research workflows by planning searches, gathering web data, generating reports, and sending emails.
 
-This is a monorepo containing multiple LangChain projects and experiments. Each project explores different aspects of LangChain, including agents, RAG (Retrieval-Augmented Generation), and various AI patterns. The projects are organized across different branches under the `projects/` namespace.
+## Description
+
+This project orchestrates AI agents to process a user query by:
+1. Planning multiple searches to effectively answer the query
+2. Executing web searches using Tavily API
+3. Synthesizing results into a structured report
+4. Automatically sending the report via email
+
+Perfect for automating research aggregation and distribution workflows.
 
 ## Tech Stack
 
-- **LangChain** - Framework for building with LLMs
-- **Python** - Primary programming language
-- **Various LLM APIs** - OpenAI, Anthropic, and other providers
+- **OpenAI Agents SDK** - Agent orchestration and coordination
+- **Tavily** - Web search capabilities
+- **SendGrid** - Email delivery
+- **LangSmith** - Agent tracing and monitoring
+- **Python 3.12+** - Core runtime
 
-## Projects
+## Key Concepts
 
-Each project lives on its own branch under `projects/`:
+- **Agent-based Architecture**: Multiple specialized agents handle different tasks (planning, searching, writing, emailing)
+- **Async Orchestration**: Parallel search execution for efficiency
+- **Tool Integration**: Agents use web search and email tools to accomplish goals
+- **Structured Outputs**: Typed schemas ensure consistent data flow between agents
 
-| Project | Branch |
-|---------|--------|
-| Hello World | `projects/hello-world` |
-| ReAct Agent with Tool Calling | `projects/ReAct-agent-with_tool_calling` |
-| ReAct Search Agent | `projects/ReAct-search-agent` |
-| Agentic RAG | `projects/agentic-rag` |
-| Documentation Helper | `projects/documentation-helper` |
-| RAG Gist | `projects/rag-gist` |
-| React Function Calling | `projects/react-function-calling` |
-| Reflection Agent | `projects/reflection-agent` |
-| Reflexion Agent | `projects/reflexion-agent` |
-| Search Agent | `projects/search-agent` |
+## Project Structure
 
-## Learning Resources
-
-This monorepo was created while learning from:
-- [Edin Marco's LangChain Course on Udemy](https://www.udemy.com/course/langchain/learn)
-- Various other Udemy courses
-
-## Getting Started
-
-To explore a specific project, switch to its branch:
-
-```bash
-git checkout projects/project-name
+```
+.
+├── main.py           # Orchestration and workflow entry point
+├── my_agents.py      # Agent definitions and tools (search, email)
+├── config.py         # Configuration and Azure client setup
+├── prompts.py        # Agent instruction prompts
+├── schemas.py        # Data models (WebSearchPlan, ReportData, etc.)
+├── pyproject.toml    # Dependencies and project metadata
+└── README.md         # This file
 ```
 
-Each project contains its own README with specific setup and usage instructions.
+## Quick Start
 
----
+1. **Install Dependencies**
+   ```bash
+   pip install -e .
+   ```
 
-**Note:** This is a learning monorepo where each branch represents a different experiment or project implementation.
+2. **Configure Credentials**
+   Create a `.env` file with:
+   ```
+   OPENAI_API_KEY=your_openai_key
+   TAVILY_API_KEY=your_tavily_key
+   SENDGRID_API_KEY=your_sendgrid_key
+   AZURE_ENDPOINT=your_azure_endpoint
+   AZURE_API_KEY=your_azure_key
+   ```
+
+3. **Run the System**
+   ```python
+   import asyncio
+   from main import plan_searches, perform_searches, write_report, send_email
+
+   async def main():
+       plan = await plan_searches("Your research question here")
+       results = await perform_searches(plan)
+       report = await write_report("Your query", results)
+       await send_email(report)
+
+   asyncio.run(main())
+   ```
