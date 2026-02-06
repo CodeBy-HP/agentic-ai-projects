@@ -1,48 +1,67 @@
-# LangChain Projects - Monorepo
+# ComplAI Sales Agent System
 
-## Overview
+## Description
 
-This is a monorepo containing multiple LangChain projects and experiments. Each project explores different aspects of LangChain, including agents, RAG (Retrieval-Augmented Generation), and various AI patterns. The projects are organized across different branches under the `projects/` namespace.
+An AI-powered multi-agent system that generates and sends cold sales emails. The system uses multiple specialized agents to draft emails in different styles (professional, engaging, concise), evaluates them, and sends the best version to prospects via email.
 
 ## Tech Stack
 
-- **LangChain** - Framework for building with LLMs
-- **Python** - Primary programming language
-- **Various LLM APIs** - OpenAI, Anthropic, and other providers
+- **Python 3.12+** - Core runtime
+- **OpenAI Agents SDK** - Multi-agent orchestration
+- **Azure Models** - LLM backend (configurable)
+- **LangSmith** - Agent tracing and monitoring
+- **SendGrid** - Email delivery service
 
-## Projects
+## Key Concepts
 
-Each project lives on its own branch under `projects/`:
+- **Multi-Agent Workflow**: Separate agents for drafting, formatting, and management
+- **Agent Orchestration**: Runner coordinates tasks and agent communication
+- **Guardrails**: Input validation and safety checks
+- **Async Processing**: Non-blocking execution with configurable max turns
+- **Tracing**: Full observability via LangSmith integration
 
-| Project | Branch |
-|---------|--------|
-| Hello World | `projects/hello-world` |
-| ReAct Agent with Tool Calling | `projects/ReAct-agent-with_tool_calling` |
-| ReAct Search Agent | `projects/ReAct-search-agent` |
-| Agentic RAG | `projects/agentic-rag` |
-| Documentation Helper | `projects/documentation-helper` |
-| RAG Gist | `projects/rag-gist` |
-| React Function Calling | `projects/react-function-calling` |
-| Reflection Agent | `projects/reflection-agent` |
-| Reflexion Agent | `projects/reflexion-agent` |
-| Search Agent | `projects/search-agent` |
+## Project Structure
 
-## Learning Resources
-
-This monorepo was created while learning from:
-- [Edin Marco's LangChain Course on Udemy](https://www.udemy.com/course/langchain/learn)
-- Various other Udemy courses
-
-## Getting Started
-
-To explore a specific project, switch to its branch:
-
-```bash
-git checkout projects/project-name
+```
+.
+├── main.py              # Entry point - runs the sales workflow
+├── my_agents.py         # Agent definitions and setup
+├── config.py            # Configuration and environment setup
+├── prompts.py           # Agent prompts and templates
+├── tools.py             # Function tools (send_html_email)
+└── pyproject.toml       # Dependencies and project metadata
 ```
 
-Each project contains its own README with specific setup and usage instructions.
+## Quick Start
 
----
+### Prerequisites
 
-**Note:** This is a learning monorepo where each branch represents a different experiment or project implementation.
+- Python 3.12+
+- API keys: Azure OpenAI, SendGrid, LangSmith (optional)
+
+### Installation
+
+```bash
+pip install -e .
+```
+
+### Configuration
+
+Create a `.env` file with:
+
+```
+AZURE_ENDPOINT=your_azure_endpoint
+AZURE_API_KEY=your_azure_key
+SENDGRID_API_KEY=your_sendgrid_key
+EMAIL_FROM=sender@example.com
+EMAIL_TO=recipient@example.com
+LANGSMITH_API_KEY=your_langsmith_key  # optional
+```
+
+### Run
+
+```bash
+python main.py
+```
+
+The system will generate and send a cold sales email to the configured recipient.
