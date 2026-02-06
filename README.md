@@ -1,48 +1,52 @@
-# LangChain Projects - Monorepo
+# Debate
 
-## Overview
-
-This is a monorepo containing multiple LangChain projects and experiments. Each project explores different aspects of LangChain, including agents, RAG (Retrieval-Augmented Generation), and various AI patterns. The projects are organized across different branches under the `projects/` namespace.
+Multi-agent AI debate system powered by CrewAI. Agents collaborate to research and present arguments on topics.
 
 ## Tech Stack
 
-- **LangChain** - Framework for building with LLMs
-- **Python** - Primary programming language
-- **Various LLM APIs** - OpenAI, Anthropic, and other providers
+- **Framework**: CrewAI 1.8.0
+- **LLM**: OpenAI
+- **Language**: Python 3.10+
 
-## Projects
+## Key Concepts
 
-Each project lives on its own branch under `projects/`:
+- **Agents**: AI workers configured in `agents.yaml` with specific roles and expertise
+- **Tasks**: Debate tasks defined in `tasks.yaml` executed by agents
+- **Tools**: Custom tools in `tools/` for agents to research and analyze topics
+- **Knowledge Base**: Static knowledge in `knowledge/` for context
 
-| Project | Branch |
-|---------|--------|
-| Hello World | `projects/hello-world` |
-| ReAct Agent with Tool Calling | `projects/ReAct-agent-with_tool_calling` |
-| ReAct Search Agent | `projects/ReAct-search-agent` |
-| Agentic RAG | `projects/agentic-rag` |
-| Documentation Helper | `projects/documentation-helper` |
-| RAG Gist | `projects/rag-gist` |
-| React Function Calling | `projects/react-function-calling` |
-| Reflection Agent | `projects/reflection-agent` |
-| Reflexion Agent | `projects/reflexion-agent` |
-| Search Agent | `projects/search-agent` |
+## Project Structure
 
-## Learning Resources
-
-This monorepo was created while learning from:
-- [Edin Marco's LangChain Course on Udemy](https://www.udemy.com/course/langchain/learn)
-- Various other Udemy courses
-
-## Getting Started
-
-To explore a specific project, switch to its branch:
-
-```bash
-git checkout projects/project-name
+```
+debate/
+├── src/debate/
+│   ├── main.py           # Entry point
+│   ├── crew.py           # Crew orchestration
+│   ├── config/
+│   │   ├── agents.yaml   # Agent definitions
+│   │   └── tasks.yaml    # Task definitions
+│   └── tools/
+│       └── custom_tool.py # Custom tools
+├── knowledge/
+│   └── user_preference.txt
+└── pyproject.toml        # Dependencies
 ```
 
-Each project contains its own README with specific setup and usage instructions.
+## Quick Start
 
----
+1. **Install dependencies**:
+   ```bash
+   cd debate
+   pip install -e .
+   ```
 
-**Note:** This is a learning monorepo where each branch represents a different experiment or project implementation.
+2. **Run debate**:
+   ```bash
+   debate
+   ```
+
+3. **Available commands**:
+   - `run_crew` - Execute crew
+   - `train` - Training mode
+   - `replay` - Replay previous runs
+   - `test` - Run tests
