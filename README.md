@@ -1,14 +1,53 @@
-# LangChain Projects - Monorepo
+# Agentic AI Projects - Monorepo
 
-## Overview
+## 🔍 Overview
 
-This is a monorepo containing multiple LangChain projects and experiments. Each project explores different aspects of LangChain, including agents, RAG (Retrieval-Augmented Generation), and various AI patterns. The projects are organized across different branches under the `projects/` namespace.
+A hands-on monorepo of Agentic AI projects, each on a separate branch. Showcases the evolution of modern AI systems — from basic LLM tool usage to advanced multi-agent, graph-based, production-grade workflows.
 
-## Tech Stack
+**Explores:**
+- LLM agents and reasoning patterns (ReAct, Reflection, Reflexion)
+- Retrieval-Augmented Generation (RAG)
+- Graph-based agent orchestration
+- Multi-agent collaboration
+- Real-world integrations (web search, email, browsers, UIs)
 
-- **LangChain** - Framework for building with LLMs
-- **Python** - Primary programming language
-- **Various LLM APIs** - OpenAI, Anthropic, and other providers
+## 🧠 Tech Stack & Concepts
+
+**Languages & Runtime**
+- Python 3.10–3.12+
+
+**LLMs & Providers**
+- Azure OpenAI, OpenAI, Google Generative AI (Gemini)
+
+**Frameworks**
+- LangChain, LangGraph, OpenAI Agents SDK, CrewAI
+
+**Agent Patterns**
+- ReAct (Reason → Act → Observe)
+- Tool/Function Calling
+- Reflection & Self-Critique Loops
+- Reflexion (Research-grade iteration)
+- Agentic RAG
+- Multi-Agent Workflows
+
+**Retrieval & Search**
+- RAG (Retrieval-Augmented Generation)
+- Chroma / Pinecone (Vector Databases)
+- Tavily Search (Web Search & Crawling)
+
+**UIs & Interfaces**
+- Gradio, Streamlit, Rich (Terminal UI)
+
+**Integrations**
+- Web Browsing (Playwright)
+- Email Automation (SendGrid)
+- Notifications (Pushover)
+- Async Workflows (asyncio)
+
+**Observability & Quality**
+- LangSmith (Tracing & Monitoring)
+- Structured Outputs (Pydantic)
+- Guardrails & Validation
 
 ## Projects
 
